@@ -1,0 +1,79 @@
+<h2>New User</h2>
+<div class="container">
+  <form [formGroup]="myForm" novalidate (ngSubmit)="onSubmit(myForm.value)">
+    <div class="form-group">
+      <label>Account Number</label>
+      <input type="number" class="form-control" formControlName="acctnum">
+      <small [hidden]="!myForm.get('acctnum').touched || myForm.get('acctnum').value > 0" class="text-danger">
+        Account number is required.
+      </small>
+    </div>
+
+    <div class="form-group">
+      <label>Loan Origination System</label>
+      <select class="form-control" formControlName="losid">
+        <option *ngFor="let item of LOS_NAMES" [value]="item.value" [selected]="item.value == myForm.get('losid')">
+          {{item.name}}
+        </option>
+      </select>
+      <small [hidden]="!myForm.get('losid').touched || myForm.get('losid').value > 0" class="text-danger">
+        LOS must be selected.
+      </small>
+    </div>
+
+    <input type="text" hidden="hidden" formControlName="comment">
+
+    <div formGroupName="user">
+      <input type="text" hidden="hidden" formControlName="userid">
+    </div>
+
+    <div class="form-group" formGroupName="user">
+      <label>Username</label>
+      <input type="text" class="form-control" formControlName="username" placeholder="Your Username">
+      <small [hidden]="!myForm.get('user').get('username').touched || myForm.get('user').get('username').valid"
+             class="text-danger">
+        Username must be at least 5 characters.
+      </small>
+    </div>
+
+    <div class="form-group" formGroupName="user">
+      <label>Firstname</label>
+      <input type="text" class="form-control" formControlName="firstname" placeholder="Your Firstname">
+      <small
+        [hidden]="!myForm.get('user').get('firstname').touched || myForm.get('user').get('firstname').valid"
+        class="text-danger">
+        Firstname is required.
+      </small>
+    </div>
+
+    <div class="form-group" formGroupName="user">
+      <label>Lastname</label>
+      <input type="text" class="form-control" formControlName="lastname" placeholder="Your Lastname">
+      <small
+        [hidden]="!myForm.get('user').get('lastname').touched || myForm.get('user').get('lastname').valid"
+        class="text-danger">
+        Lastname is required.
+      </small>
+    </div>
+
+    <div class="form-group" formGroupName="user">
+      <label>Email</label>
+      <input type="text" class="form-control" formControlName="email" placeholder="Your Email address">
+      <small [hidden]="!myForm.get('user').get('email').touched || myForm.get('user').get('email').valid"
+             class="text-danger">
+        Invalid Email address.
+      </small>
+    </div>
+
+    <button type="submit" class="btn btn-default btn-primary" [disabled]="myForm.invalid">
+      Submit
+    </button>
+    &nbsp;&nbsp;&nbsp;
+    <button type="button" class="btn btn-primary" (click)="onCancel()">
+      Cancel
+    </button>
+
+    <spinner [visible]="isLoading"></spinner>
+
+  </form>
+</div>

@@ -1,0 +1,73 @@
+<h2>Change Password</h2>
+<br>
+<div class="container">
+  <div class="row">
+    <div class="col col-lg-7">
+      <form [formGroup]="myForm" novalidate (ngSubmit)="onSubmit(myForm.value)">
+        <input type="text" class="form-control" formControlName="token" [hidden]="true">
+        <div [hidden]="isTokenUrl">
+          <div class="form-group">
+            <label>Username</label>
+            <input type="text" class="form-control" formControlName="username" placeholder="Your Username">
+            <small [hidden]="!myForm.controls.username.touched || myForm.controls.username.valid"
+                   class="text-danger">
+              Username must contain at least 3 characters.
+            </small>
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" class="form-control" formControlName="password" placeholder="Current Password">
+            <small [hidden]="!myForm.controls.password.touched || myForm.controls.password.valid"
+                   class="text-danger">
+              Password must contain at least 6 characters.
+            </small>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>New Password</label>
+          <input type="password" class="form-control" formControlName="newpassword1" placeholder="New Password">
+          <small [hidden]="!myForm.controls.newpassword1.touched || myForm.controls.newpassword1.valid"
+                 class="text-danger">
+            Password rules failed.
+          </small>
+        </div>
+        <div class="form-group">
+          <label>Confirm Password</label>
+          <input type="password" class="form-control" formControlName="newpassword2"
+                 placeholder="Re-enter New Password">
+          <small class="text-danger"
+                 *ngIf="myForm.controls.newpassword2.touched && myForm.controls.newpassword2.errors?.MatchPassword">
+            Please enter matching New and Confirm Passwords
+          </small>
+        </div>
+        <button type="submit" class="btn btn-default btn-primary"
+                [disabled]="myForm.invalid && !isTokenUrl">
+          Submit
+        </button>
+        &nbsp;&nbsp;&nbsp;
+        <button type="button" class="btn btn-default btn-primary" (click)="onCancel()">
+          Cancel</button>
+        <spinner [visible]="isLoading"></spinner>
+      </form>
+    </div>
+    <div class="col col-lg-5">
+      <br/>
+      <div class="card">
+        <div class="card-block">
+          <h5 class="card-title text-info">Password Requirements</h5>
+          <ul>
+            <li>Password cannot be any one of the previous 6.</li>
+            <li>Password should be minimum of eight (8) characters long.</li>
+            <li>Password must contain at least one character from each of these groups:</li>
+            <ul>
+              <li>Upper Alpha</li>
+              <li>Lower Alpha</li>
+              <li>Number</li>
+              <li>Special characters: @*#!$^()</li>
+            </ul>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
