@@ -4,9 +4,10 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
+
   production: false,
 
-  recaptchaUrl: 'https://www.google.com/recaptcha/api/siteverify',
+  externalServiceUrl: 'http://localhost:8080/cc-admin/external',
 
   authenticationUrl: 'http://localhost:8080/cc-admin/login',
 

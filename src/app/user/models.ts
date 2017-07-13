@@ -12,7 +12,8 @@ export interface IUser {
 export interface IUserDetails {
   losid: number;
   acctnum: number;
-  comment: string;
+  comment?: string;
+  recaptcha?: string;
   user: IUser;
 }
 

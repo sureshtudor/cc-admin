@@ -6,7 +6,7 @@ import {DialogService} from "ng2-bootstrap-modal";
 import {AlertComponent} from "../../shared/modal/alert.component";
 import {ConfirmComponent} from "../../shared/modal/confirm.component";
 import {PasswordValidator} from "./password-validator";
-import {IChangePassword, PasswordService} from "../../services/password.service";
+import {IChangePassword, ExternalService} from "../../services/external.service";
 
 @Component({
   selector: 'app-change-pwd',
@@ -22,7 +22,7 @@ export class ChangePwdComponent implements OnInit {
               private route: ActivatedRoute,
               private router: Router,
               private modal: DialogService,
-              private pwdService: PasswordService) {
+              private externalService: ExternalService) {
   }
 
   ngOnInit() {
@@ -48,7 +48,7 @@ export class ChangePwdComponent implements OnInit {
   onSubmit(model: IChangePassword) {
     this.isLoading = true; // start spinner
 
-    this.pwdService.pwmChangePassword(model).subscribe(
+    this.externalService.pwmChangePassword(model).subscribe(
       data => {
         this.modal.addDialog(AlertComponent,
           {title: 'Success', message: data}, {closeByClickingOutside: true});

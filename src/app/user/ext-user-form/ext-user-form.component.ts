@@ -3,11 +3,10 @@ import {Location} from '@angular/common';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {DialogService} from 'ng2-bootstrap-modal';
 import {AlertComponent} from "../../shared/modal/alert.component";
-
-import {UserService} from "../../services/user.service";
+import {ExternalService} from "../../services/external.service";
 import {IUserDetails} from "../models";
-import {environment} from '../../../environments/environment';
 import {ConfirmComponent} from "../../shared/modal/confirm.component";
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'ext-user-form',
@@ -29,7 +28,7 @@ export class ExtUserFormComponent implements OnInit {
   constructor(private fb: FormBuilder,
               private location: Location,
               private modal: DialogService,
-              private userService: UserService,) {
+              private externalService: ExternalService,) {
     this.LOS_NAMES = environment.LOSNames;
   }
 
@@ -38,6 +37,7 @@ export class ExtUserFormComponent implements OnInit {
       acctnum: 3017460,
       losid: 0,
       comment: '',
+      recaptcha: ['', Validators.required],
       user: this.fb.group({
           userid: 0,
           username: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(20)]],
@@ -52,7 +52,7 @@ export class ExtUserFormComponent implements OnInit {
   onSubmit(model: IUserDetails) {
     this.isLoading = true;
 
-    this.userService.createUser(model).subscribe(
+    this.externalService.createUser(model).subscribe(
       data => {
         this.modal.addDialog(AlertComponent,
           {title: 'Success', message: data}, {closeByClickingOutside: true});

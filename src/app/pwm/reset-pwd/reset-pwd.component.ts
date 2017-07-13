@@ -5,7 +5,7 @@ import {DialogService} from "ng2-bootstrap-modal";
 
 import {AlertComponent} from "../../shared/modal/alert.component";
 import {ConfirmComponent} from "../../shared/modal/confirm.component";
-import {PasswordService} from "../../services/password.service";
+import {ExternalService} from "../../services/external.service";
 
 @Component({
   selector: 'app-reset-pwd',
@@ -28,6 +28,7 @@ import {PasswordService} from "../../services/password.service";
             Username must contain at least 3 characters.
           </small>
         </div>
+
         <!-- I'm not a robot check -->
         <input type="text" class="form-control" formControlName="recaptcha" hidden>
         <recaptcha (resolved)="myForm.get('recaptcha').patchValue($event)" 
@@ -55,7 +56,7 @@ export class ResetPwdComponent implements OnInit {
   constructor(private fb: FormBuilder,
               private router: Router,
               private modal: DialogService,
-              private pwdService: PasswordService) {
+              private externalService: ExternalService) {
   }
 
   ngOnInit() {
@@ -69,7 +70,7 @@ export class ResetPwdComponent implements OnInit {
   onSubmit(model) {
     this.isLoading = true; // start spinner
 
-    this.pwdService.pwmResetPassword(model.recaptcha, model.username).subscribe(
+    this.externalService.pwmResetPassword(model.recaptcha, model.username).subscribe(
       data => {
         this.modal.addDialog(AlertComponent,
           {title: 'Success', message: data}, {closeByClickingOutside: true});

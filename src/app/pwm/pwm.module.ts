@@ -9,7 +9,7 @@ import {SharedModule} from "../shared/shared.module";
 import {ResetPwdComponent} from "./reset-pwd/reset-pwd.component";
 import {ChangePwdComponent} from "./change-pwd/change-pwd.component";
 import {UnsavedChangeGuard} from "../shared/guard/unsaved-change.guard";
-import {PasswordService} from "../services/password.service";
+import {ExternalService} from "../services/external.service";
 
 export const ROUTES: Routes = [
   {path: 'pwm/reset', component: ResetPwdComponent, canDeactivate: [UnsavedChangeGuard]},
@@ -31,7 +31,7 @@ export const ROUTES: Routes = [
   ],
   exports: [],
   providers: [
-    PasswordService
+    ExternalService
   ]
 })
 export class PasswordManagerModule {

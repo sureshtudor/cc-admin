@@ -21,10 +21,10 @@
       </small>
     </div>
 
-    <input type="text" hidden="hidden" formControlName="comment">
+    <input type="text" formControlName="comment" hidden>
 
     <div formGroupName="user">
-      <input type="text" hidden="hidden" formControlName="userid">
+      <input type="text" formControlName="userid" hidden>
     </div>
 
     <div class="form-group" formGroupName="user">
@@ -64,6 +64,13 @@
         Invalid Email address.
       </small>
     </div>
+
+    <!-- I'm not a robot check -->
+    <input type="text" class="form-control" formControlName="recaptcha" hidden>
+    <recaptcha (resolved)="myForm.get('recaptcha').patchValue($event)"
+               siteKey="6Ldm3SgUAAAAAPJzIUecsl5MZLfYMoa55l0o_ggx">
+    </recaptcha>
+    <br/>
 
     <button type="submit" class="btn btn-default btn-primary" [disabled]="myForm.invalid">
       Submit
