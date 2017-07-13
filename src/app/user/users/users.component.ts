@@ -59,7 +59,7 @@ export class UsersComponent implements OnInit {
   onDelete(user) {
     let disposable = this.modal.addDialog(ConfirmComponent, {
       title: 'Delete User',
-      message: "Are you sure you want to onDelete '" + user.username + "' ?"
+      message: "Are you sure you want to Delete '" + user.username + "' ?"
     })
       .subscribe((isConfirmed) => {
         if (isConfirmed) {
@@ -99,7 +99,7 @@ export class UsersComponent implements OnInit {
 
   private rxHandleError(err: any) {
     err => this.modal.addDialog(AlertComponent,
-      {title: 'Error', message: JSON.parse(err.text()).message},
+      {title: 'Error', message: err.json().message || 'Server Error !'},
       {closeByClickingOutside: true})
   }
 

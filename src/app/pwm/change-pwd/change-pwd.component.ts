@@ -36,6 +36,7 @@ export class ChangePwdComponent implements OnInit {
         password: ['', [Validators.required, Validators.minLength(6)]],
         newpassword1: ['', [Validators.required, Validators.pattern(passwordRegex)]],
         newpassword2: ['', Validators.required],
+        recaptcha: ['', Validators.required],
         token: param
       },
       {
@@ -56,7 +57,8 @@ export class ChangePwdComponent implements OnInit {
       err => {
         this.isLoading = false; // stop spinner
         this.modal.addDialog(AlertComponent,
-          {title: 'Error', message: JSON.parse(err.text()).message}, {closeByClickingOutside: true})
+          {title: 'Error', message: err.json().message || 'Server Error !'},
+          {closeByClickingOutside: true})
       }
     );
   }

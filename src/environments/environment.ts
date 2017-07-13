@@ -6,7 +6,9 @@
 export const environment = {
   production: false,
 
-  authenticationUrl: 'http://localhost:8080/cc-admin/oauth2',
+  recaptchaUrl: 'https://www.google.com/recaptcha/api/siteverify',
+
+  authenticationUrl: 'http://localhost:8080/cc-admin/login',
 
   userServiceUrl: 'http://localhost:8080/cc-admin/user-service',
 

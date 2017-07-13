@@ -2,7 +2,6 @@ import {Inject, Injectable} from '@angular/core';
 import {Http} from '@angular/http';
 import {Observable} from 'rxjs/Rx';
 import {IPasswordDetails} from "../user/models";
-// import {IChangePassword} from "../pwm/pwm.service";
 import {BaseService} from "./base.service";
 import {environment} from '../../environments/environment';
 import {DOCUMENT} from "@angular/platform-browser";
@@ -19,7 +18,8 @@ export interface IChangePassword {
   username: string,
   password: string,
   newpassword1: string,
-  newpassword2: string
+  newpassword2: string,
+  recaptcha: string
 }
 
 @Injectable()
@@ -32,38 +32,40 @@ export class PasswordService extends BaseService {
 
   getUserPassword(userid: number): Observable<IPasswordDetails> {
     return this.http.get(
-      BaseService.appendRequestParam(PASSWORD_URI + CURRENT_PWD_API, 'userid', userid),
-      BaseService.getJsonHttpOption())
-      .map(res => res.json() as IPasswordDetails).catch(BaseService.handleError);
+        this.appendRequestParam(PASSWORD_URI + CURRENT_PWD_API, 'userid', userid),
+        this.getJsonHttpOption())
+      .map(res => res.json() as IPasswordDetails).catch(this.handleError);
   }
 
   extendPasswordExpiry(pwdid: number): Observable<String> {
     return this.http.get(
-      BaseService.appendRequestParam(PASSWORD_URI + EXTEND_PWD_API, 'pwdid', pwdid),
-      BaseService.getJsonHttpOption())
-      .map(res => res.text()).catch(BaseService.handleError);
+        this.appendRequestParam(PASSWORD_URI + EXTEND_PWD_API, 'pwdid', pwdid),
+        this.getJsonHttpOption())
+      .map(res => res.text()).catch(this.handleError);
   }
 
   resetPassword(userid: number): Observable<String> {
     return this.http.get(
-      BaseService.appendRequestParam(PASSWORD_URI + RESET_PWD_API, 'userid', userid),
-      BaseService.getJsonHttpOption())
-      .map(res => res.text()).catch(BaseService.handleError);
+        this.appendRequestParam(PASSWORD_URI + RESET_PWD_API, 'userid', userid),
+        this.getJsonHttpOption())
+      .map(res => res.text()).catch(this.handleError);
   }
 
-  pwmResetPassword(username: string): Observable<String> {
+  pwmResetPassword(recaptcha: string, username: string): Observable<String> {
     let url = this.document.location.href.replace('reset', 'change');
     url = url.replace('#', '%23'); // TODO: use url encoding
 
     return this.http.get(
-      BaseService.appendRequestParams(PASSWORD_URI + PWM_RESET_PWD_API, 'username', username, 'url', url),
-      BaseService.getJsonHttpOption())
-      .map(res => res.text()).catch(BaseService.handleError);
+        this.appendRequestParams3(PASSWORD_URI + PWM_RESET_PWD_API,
+          'recaptcha', recaptcha, 'username', username, 'url', url),
+        this.getJsonHttpOption())
+      .map(res => res.text()).catch(this.handleError);
   }
 
   pwmChangePassword(model: IChangePassword): Observable<String> {
-    return this.http.post(PASSWORD_URI + PWM_CHANGE_PWD_API, JSON.stringify(model),
-      BaseService.getJsonHttpOption())
-      .map(res => res.text()).catch(BaseService.handleError);
+    return this.http.post(
+        this.appendRequestParam(PASSWORD_URI + PWM_CHANGE_PWD_API, 'recaptcha', model.recaptcha),
+        JSON.stringify(model), this.getJsonHttpOption())
+      .map(res => res.text()).catch(this.handleError);
   }
 }

@@ -28,6 +28,13 @@ import {PasswordService} from "../../services/password.service";
             Username must contain at least 3 characters.
           </small>
         </div>
+        <!-- I'm not a robot check -->
+        <input type="text" class="form-control" formControlName="recaptcha" hidden>
+        <recaptcha (resolved)="myForm.get('recaptcha').patchValue($event)" 
+                   siteKey="6Ldm3SgUAAAAAPJzIUecsl5MZLfYMoa55l0o_ggx">
+        </recaptcha>
+        <br/>
+
         <button type="submit" class="btn btn-default btn-primary" [disabled]="myForm.invalid">
           Submit
         </button>
@@ -54,23 +61,25 @@ export class ResetPwdComponent implements OnInit {
   ngOnInit() {
     this.isLoading = false;
     this.myForm = this.fb.group({
-      username: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]]
+      username: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
+      recaptcha: ['', Validators.required]
     });
   }
 
   onSubmit(model) {
     this.isLoading = true; // start spinner
 
-    this.pwdService.pwmResetPassword(model.username).subscribe(
+    this.pwdService.pwmResetPassword(model.recaptcha, model.username).subscribe(
       data => {
         this.modal.addDialog(AlertComponent,
           {title: 'Success', message: data}, {closeByClickingOutside: true});
         this.exitPage();
       },
       err => {
-        this.isLoading = false // stop spinner
+        this.isLoading = false; // stop spinner
         this.modal.addDialog(AlertComponent,
-          {title: 'Error', message: JSON.parse(err.text()).message}, {closeByClickingOutside: true})
+          {title: 'Error', message: err.json().message || 'Server Error !'},
+          {closeByClickingOutside: true})
       }
     );
   }

@@ -60,7 +60,8 @@ export class ExtUserFormComponent implements OnInit {
       },
       err => {
         this.modal.addDialog(AlertComponent,
-          {title: 'Error', message: JSON.parse(err.text()).message}, {closeByClickingOutside: true});
+          {title: 'Error', message: err.json().message || 'Server Error !'},
+          {closeByClickingOutside: true});
         this.isLoading = false;
       }
     )

@@ -3,6 +3,7 @@ import {CommonModule} from '@angular/common';
 import {HttpModule} from '@angular/http';
 import {RouterModule, Routes} from '@angular/router';
 import {ReactiveFormsModule} from '@angular/forms';
+import {RecaptchaModule} from 'ng2-recaptcha';
 
 import {SharedModule} from "../shared/shared.module";
 import {ResetPwdComponent} from "./reset-pwd/reset-pwd.component";
@@ -20,6 +21,7 @@ export const ROUTES: Routes = [
     CommonModule,
     HttpModule,
     ReactiveFormsModule,
+    RecaptchaModule.forRoot(),
     SharedModule,
     RouterModule.forChild(ROUTES)
   ],

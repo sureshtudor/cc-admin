@@ -18,45 +18,41 @@ export class UserService extends BaseService {
   }
 
   getUsers(page: number, size: number): Observable<IUser[]> {
-    return this.http.get(BaseService.appendPageParam(USER_SEARCH_URI, page, size))
-      .map(res => res.json()).catch(BaseService.handleError);
+    return this.http.get(this.appendPageParam(USER_SEARCH_URI, page, size), this.getJsonHttpOption())
+      .map(res => res.json()).catch(this.handleError);
   }
 
   filterUsers(key: string, value: string): Observable<IUser[]> {
-    return this.http.get(BaseService.appendSearchParam(USER_SEARCH_URI, key, value))
-      .map(res => res.json()).catch(BaseService.handleError);
+    return this.http.get(this.appendSearchParam(USER_SEARCH_URI, key, value), this.getJsonHttpOption())
+      .map(res => res.json()).catch(this.handleError);
   }
 
   getUser(userid: number): Observable<IUserDetails> {
-    return this.http.get(
-      BaseService.appendPathParam(USER_URI + USERS_API, userid), BaseService.getJsonHttpOption())
-      .map(res => res.json() as IUserDetails).catch(BaseService.handleError);
+    return this.http.get(this.appendPathParam(USER_URI + USERS_API, userid), this.getJsonHttpOption())
+      .map(res => res.json() as IUserDetails).catch(this.handleError);
   }
 
   createUser(user: IUserDetails): Observable<string> {
-    return this.http.post(USER_URI + USERS_API, JSON.stringify(user), BaseService.getJsonHttpOption())
-      .map(res => res.text()).catch(BaseService.handleError);
+    return this.http.post(USER_URI + USERS_API, JSON.stringify(user), this.getJsonHttpOption())
+      .map(res => res.text()).catch(this.handleError);
   }
 
   updateUser(user: IUserDetails): Observable<string> {
     return this.http.put(
-      BaseService.appendPathParam(USER_URI + USERS_API, user.user.userid), JSON.stringify(user),
-      BaseService.getJsonHttpOption())
-      .map(res => res.text()).catch(BaseService.handleError);
+      this.appendPathParam(USER_URI + USERS_API, user.user.userid), JSON.stringify(user),
+      this.getJsonHttpOption())
+      .map(res => res.text()).catch(this.handleError);
   }
 
   deleteUser(userid): Observable<string> {
-    return this.http.delete(
-      BaseService.appendPathParam(USER_URI + USERS_API, userid),
-      BaseService.getJsonHttpOption())
-      .map(res => res.text()).catch(BaseService.handleError);
+    return this.http.delete(this.appendPathParam(USER_URI + USERS_API, userid), this.getJsonHttpOption())
+      .map(res => res.text()).catch(this.handleError);
   }
 
   isUsernameExist(username: string): Observable<boolean> {
     return this.http.get(
-      BaseService.appendRequestParam(USER_URI + USER_EXIST_API, 'username', username),
-      BaseService.getJsonHttpOption())
-      .map(res => BaseService.toBoolean(res.text())).catch(BaseService.handleError);
+      this.appendRequestParam(USER_URI + USER_EXIST_API, 'username', username), this.getJsonHttpOption())
+      .map(res => this.toBoolean(res.text())).catch(this.handleError);
   }
 
 }

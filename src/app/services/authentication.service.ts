@@ -1,33 +1,36 @@
+import {Http} from "@angular/http";
 import {EventEmitter, Injectable, Output} from '@angular/core';
 import {Observable} from "rxjs";
+import {BaseService, IAuthenticatedUser} from "./base.service";
+import {environment} from "../../environments/environment";
+
+const AUTHENTICATION_URI = environment.authenticationUrl;
 
 @Injectable()
-export class AuthenticationService {
+export class AuthenticationService extends BaseService {
 
   @Output() authEvent: EventEmitter<void> = new EventEmitter<void>();
 
-  constructor() {
+  constructor(private http: Http) {
+    super();
   }
 
-  login(username, password): Observable<string> {
-    if (username === 'demo-user' && password === 'demo-password') {
-      localStorage.setItem('username', username);
-      this.authEvent.emit();
-      return Observable.of('success');
-    }
-    return Observable.of('Invalid username or password!');
+  login(username, password): Observable<IAuthenticatedUser> {
+    let body = JSON.stringify({username: username, password: password});
+
+    return this.http.post(AUTHENTICATION_URI, body)
+                    .map(res => res.json() as IAuthenticatedUser)
+                    .catch(this.handleError);
   }
 
   logout() {
-    localStorage.removeItem('username');
+    this.removeAuthenticatedUser();
     this.authEvent.emit();
   }
 
-  isAuthenticated(): boolean {
-    return localStorage.getItem('username') != null;
+  setAuthenticatedUser(user: IAuthenticatedUser): void {
+    this.storeAuthenticatedUser(user);
+    this.authEvent.emit();
   }
 
-  getAuthenticatedUser(): string {
-    return localStorage.getItem('username');
-  }
 }

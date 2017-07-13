@@ -30,8 +30,8 @@ export class AuthenticationComponent implements OnInit {
 
   ngOnInit() {
     this.myForm = this.fb.group({
-      username: ['demo-user', [Validators.required, Validators.minLength(4), Validators.maxLength(20)]],
-      password: ['demo-password', [Validators.required, Validators.minLength(6), Validators.maxLength(20)]],
+      username: ['studor', [Validators.required, Validators.minLength(4), Validators.maxLength(20)]],
+      password: ['firstAM1', [Validators.required, Validators.minLength(6), Validators.maxLength(20)]],
     });
   }
 
@@ -40,16 +40,12 @@ export class AuthenticationComponent implements OnInit {
 
     this.authService.login(model.username, model.password).subscribe(
       data => {
-        if (data === 'success') {
-          this.myForm.markAsPristine();
-          this.router.navigate(['users']);
-        }
-        else {
-          this.errorMsg = data;
-        }
+        this.authService.setAuthenticatedUser(data);
+        this.router.navigate(['users']);
       },
       err => {
-        this.errorMsg = 'Exception: ' + err.value;
+        this.isLoading = false;
+        this.errorMsg = err.json().message || 'Server Error !';
       }
     );
   }
@@ -69,5 +65,4 @@ export class AuthenticationComponent implements OnInit {
     this.myForm.markAsPristine();
     this.router.navigate(['']);
   }
-
 }

@@ -59,6 +59,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   private refresh() {
     this.isAuthenticated = this.authService.isAuthenticated();
-    this.authenticatedUser = this.isAuthenticated ? this.authService.getAuthenticatedUser() : '';
+    this.authenticatedUser = this.isAuthenticated ? this.authService.getAuthenticatedFullname() : '';
   }
 }

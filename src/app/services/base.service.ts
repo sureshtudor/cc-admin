@@ -1,39 +1,80 @@
 import {Observable} from "rxjs/Observable";
 import {Headers, RequestOptions} from '@angular/http';
 
+export const AUTHENTICATED_USER = 'AUTHENTICATED_USER';
+
+export interface IAuthenticatedUser {
+  token: string,
+  username: string,
+  fullname: string,
+  roles: string[]
+}
+
 export abstract class BaseService {
 
-  static getJsonHttpOption(): RequestOptions {
+  getJsonHttpOption(): RequestOptions {
     let headers = new Headers({'Content-Type': 'application/json'});
+    if (this.isAuthenticated()) {
+      headers.append('Authorization', 'Bearer ' + this.getAuthenticatedToken());
+    }
     return new RequestOptions({headers: headers});
   }
 
-  static handleError(error: Response | any) {
-    console.log('Server Error: ' + error);
+  handleError(error: Response | any) {
+    // hook for enterprise logging maybe?
     return Observable.throw(error);
   }
 
-  static appendPathParam(url, id): string {
+  appendPathParam(url, id): string {
     return url + "/" + id;
   }
 
-  static appendRequestParam(url, param, value): string {
+  appendRequestParam(url, param, value): string {
     return url + "?" + param + '=' + value;
   }
 
-  static appendRequestParams(url, param1, value1, param2, value2): string {
+  appendRequestParams2(url, param1, value1, param2, value2): string {
     return url + "?" + param1 + '=' + value1 + "&" + param2 + '=' + value2;
   }
 
-  static appendPageParam(url, page, size): string {
+  appendRequestParams3(url, param1, value1, param2, value2, param3, value3): string {
+    return url + "?" + param1 + '=' + value1 + "&" + param2 + '=' + value2 + "&" + param3 + '=' + value3;
+  }
+
+  appendPageParam(url, page, size): string {
     return url + '?page=' + page + '&size=' + size;
   }
 
-  static appendSearchParam(url, key, value): string {
+  appendSearchParam(url, key, value): string {
     return url + '/search/findBy' + key + '?val=' + value;
   }
 
-  static toBoolean(val: string): boolean {
+  toBoolean(val: string): boolean {
     return val === 'true' ? true : false;
   }
+
+  storeAuthenticatedUser(user: IAuthenticatedUser) {
+    localStorage.setItem(AUTHENTICATED_USER, JSON.stringify(user));
+  }
+
+  removeAuthenticatedUser() {
+    localStorage.removeItem(AUTHENTICATED_USER);
+  }
+
+  isAuthenticated(): boolean {
+    return this.getAuthenticatedUser() != null;
+  }
+
+  getAuthenticatedToken(): string {
+    return this.getAuthenticatedUser().token;
+  }
+
+  getAuthenticatedFullname(): string {
+    return this.getAuthenticatedUser().fullname;
+  }
+
+  getAuthenticatedUser(): IAuthenticatedUser {
+    return JSON.parse(localStorage.getItem(AUTHENTICATED_USER)) as IAuthenticatedUser;
+  }
+
 }
