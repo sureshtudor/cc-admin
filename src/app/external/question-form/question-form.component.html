@@ -1,0 +1,108 @@
+<br/>
+<h3>Setup Security Questions</h3>
+<br/>
+<div class="container">
+  <form [formGroup]="myForm" novalidate (ngSubmit)="onSubmit(myForm.value)">
+
+    <input type="text" class="form-control" formControlName="token" [hidden]="true">
+
+    <div [hidden]="isTokenUrl">
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" class="form-control" formControlName="username" placeholder="Your Username">
+        <small [hidden]="!myForm.controls.username.touched || myForm.controls.username.valid"
+               class="text-danger">
+          Username must contain at least 3 characters.
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" class="form-control" formControlName="password" placeholder="Current Password">
+        <small [hidden]="!myForm.controls.password.touched || myForm.controls.password.valid"
+               class="text-danger">
+          Password must contain at least 6 characters.
+        </small>
+      </div>
+      <br/>
+    </div>
+
+    <div class="form-group">
+      <label>Question #1</label>
+      <select class="form-control" formControlName="question1">
+        <option value="0">-- Select a question --</option>
+        <option *ngFor="let item of QUESTION_GROUP1" [value]="item.value" [selected]="item.value == myForm.get('question1')">
+          {{item.name}}
+        </option>
+      </select>
+      <small [hidden]="!myForm.get('question1').touched || myForm.get('question1').value > 0" class="text-danger">
+        Question must be selected.
+      </small>
+    </div>
+
+    <div class="form-group">
+      <input type="text" class="form-control" formControlName="answer1" placeholder="Answer to the selected question">
+      <small [hidden]="!myForm.get('answer1').touched || myForm.get('answer1').valid" class="text-danger">
+        Answer is required.
+      </small>
+    </div>
+
+    <div class="form-group">
+      <label>Question #2</label>
+      <select class="form-control" formControlName="question2">
+        <option value="0">-- Select a question --</option>
+        <option *ngFor="let item of QUESTION_GROUP2" [value]="item.value" [selected]="item.value == myForm.get('question2')">
+          {{item.name}}
+        </option>
+      </select>
+      <small [hidden]="!myForm.get('question2').touched || myForm.get('question2').value > 0" class="text-danger">
+        Question must be selected.
+      </small>
+    </div>
+
+    <div class="form-group">
+      <input type="text" class="form-control" formControlName="answer2" placeholder="Answer to the selected question">
+      <small [hidden]="!myForm.get('answer2').touched || myForm.get('answer2').valid" class="text-danger">
+        Answer is required.
+      </small>
+    </div>
+
+    <div class="form-group">
+      <label>Question #3</label>
+      <select class="form-control" formControlName="question3">
+        <option value="0">-- Select a question --</option>
+        <option *ngFor="let item of QUESTION_GROUP3" [value]="item.value" [selected]="item.value == myForm.get('question3')">
+          {{item.name}}
+        </option>
+      </select>
+      <small [hidden]="!myForm.get('question3').touched || myForm.get('question3').value > 0" class="text-danger">
+        Question must be selected.
+      </small>
+    </div>
+
+    <div class="form-group">
+      <input type="text" class="form-control" formControlName="answer3" placeholder="Answer to the selected question">
+      <small [hidden]="!myForm.get('answer3').touched || myForm.get('answer3').valid" class="text-danger">
+        Answer is required.
+      </small>
+    </div>
+
+    <!-- I'm not a robot check -->
+    <input type="text" class="form-control" formControlName="recaptcha" hidden>
+    <re-captcha #reCaptcha (resolved)="myForm.get('recaptcha').patchValue($event)"
+               siteKey="6Ldm3SgUAAAAAPJzIUecsl5MZLfYMoa55l0o_ggx">
+    </re-captcha>
+    <br/>
+
+    <button type="submit" class="btn btn-default btn-primary"
+            [disabled]="myForm.invalid && !isTokenUrl">
+      Submit
+    </button>
+    &nbsp;&nbsp;&nbsp;
+    <button type="button" class="btn btn-default btn-primary" (click)="onCancel()">
+      Cancel</button>
+
+    <spinner [visible]="isLoading"></spinner>
+
+  </form>
+</div>

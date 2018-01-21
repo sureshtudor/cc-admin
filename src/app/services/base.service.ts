@@ -25,7 +25,7 @@ export abstract class BaseService {
     return Observable.throw(error);
   }
 
-  appendPathParam(url, id): string {
+  appendPathVariable(url, id): string {
     return url + "/" + id;
   }
 

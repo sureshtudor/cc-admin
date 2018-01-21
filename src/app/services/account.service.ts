@@ -19,7 +19,7 @@ export class AccountService extends BaseService {
 
   getAccount(id: number): Observable<IAccountDetails> {
     return this.http.get(
-      this.appendPathParam(ACCOUNT_URI + ACCTS_API, id), this.getJsonHttpOption())
+      this.appendPathVariable(ACCOUNT_URI + ACCTS_API, id), this.getJsonHttpOption())
       .map(res => res.json() as IAccountDetails).catch(this.handleError);
   }
 

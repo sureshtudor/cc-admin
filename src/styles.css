@@ -1,5 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 
-/* bootstrap-4-alpha flatty theme */
+/* bootswatch flatty theme for bootstrap-4 */
 @import "assets/styles/bootstrap.min.css";
+
+/* fontawesome 5.0 */
+@import "assets/styles/fontawesome.min.css";
 

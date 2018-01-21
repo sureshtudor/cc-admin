@@ -10,7 +10,7 @@ import {AppComponent} from './app.component';
 import {NavbarComponent} from './shared/navbar.component';
 import {NotFoundComponent} from './shared/not-found.component';
 import {AuthenticationModule} from "./auth/authentication.module";
-import {PasswordManagerModule} from "./pwm/pwm.module";
+import {ExternalModule} from "./external/external.module";
 // import {HashLocationStrategy, LocationStrategy} from "@angular/common";
 
 export const ROUTES: Routes = [
@@ -25,7 +25,7 @@ export const ROUTES: Routes = [
     AuthenticationModule,
     HomeModule,
     UserModule,
-    PasswordManagerModule,
+    ExternalModule,
     RouterModule.forRoot(ROUTES, {useHash: true})
   ],
   declarations: [

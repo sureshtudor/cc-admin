@@ -9,18 +9,20 @@ export interface PromptModel {
 @Component({
   selector: 'prompt',
   template: `
-    <div class="modal-dialog">
+    <div class="modal-dialog" role="document">
       <div class="modal-content">
-        <div class="modal-header justify-content-start">
-          <button type="button" class="close" (click)="close()">&times;</button>
+        <div class="modal-header">
           <h4 class="modal-title">{{title || 'Prompt'}}</h4>
+          <button type="button" class="close" aria-label="Close" (click)="close()">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
         <div class="modal-body">
           <label>{{question}}</label><input type="text" class="form-control" [(ngModel)]="message" name="name">
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary" (click)="apply()">OK</button>
-          <button type="button" class="btn btn-default" (click)="close()">Cancel</button>
+          <button type="button" class="btn btn-secondary" (click)="apply()">OK</button>
+          <button type="button" class="btn btn-primary" (click)="close()">Cancel</button>
         </div>
       </div>
     </div>`

@@ -48,7 +48,9 @@ export class UserFormComponent implements OnInit {
     this.myForm = this.fb.group({
       acctnum: 3017460, // null,
       losid: 0,
+      token:'',
       comment: '',
+      recaptcha: '',
       user: this.fb.group({
           userid: 0,
           active: true,
@@ -100,13 +102,13 @@ export class UserFormComponent implements OnInit {
 
     if (model.user.userid > 0) {  // update user
       this.userService.updateUser(model).subscribe(
-        data => this.rxSuccessHandler(data, true),
+        data => this.rxSuccessHandler(data),
         err => this.rxErrorHandle(err)
       );
     }
     else {  // create user
       this.userService.createUser(model).subscribe(
-        data => this.rxSuccessHandler(data, true),
+        data => this.rxSuccessHandler(data),
         err => this.rxErrorHandle(err)
       );
     }
@@ -152,12 +154,12 @@ export class UserFormComponent implements OnInit {
 
   onCancel() {
     if (!this.myForm.touched) {
-      this.exitPage();
+      this.exitPage(true);
     }
     else {
       this.modal.addDialog(ConfirmComponent,
         {title: 'Confirm', message: 'Are you sure you want to navigate away?'})
-        .subscribe(result => result ? this.exitPage() : null);
+        .subscribe(result => result ? this.exitPage(true) : null);
     }
   }
 
@@ -181,27 +183,27 @@ export class UserFormComponent implements OnInit {
     );
   }
 
-  private rxSuccessHandler(data: any, isExit: boolean = false) {
+  private rxSuccessHandler(data: any) {
     this.modal.addDialog(AlertComponent, {
       title: 'Success',
       message: data
     }, {closeByClickingOutside: true});
-
-    this.isLoading = false;
-    if (isExit) this.exitPage();
+    this.exitPage();
   }
 
   private rxErrorHandle(err: any) {
     this.modal.addDialog(AlertComponent, {
       title: 'Error', message: err.json().message || 'Server Error !'},
       {closeByClickingOutside: true});
-
-    this.isLoading = false;
+    this.exitPage();
   }
 
-  private exitPage() {
+  private exitPage(navigateBack: boolean = false) {
+    this.isLoading = false;
     this.myForm.markAsPristine();
-    this.location.back();
+    if (navigateBack) {
+      this.location.back();
+    }
   }
 
   private resetAccountDetails() {

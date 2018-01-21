@@ -1,4 +1,10 @@
 
+export interface IAuthAccount {
+  recaptcha: string;
+  acctnum: number;
+  password: string;
+}
+
 export interface IUser {
   userid: number;
   username:string;
@@ -10,10 +16,11 @@ export interface IUser {
 }
 
 export interface IUserDetails {
-  losid: number;
-  acctnum: number;
-  comment?: string;
   recaptcha?: string;
+  token?: string;
+  acctnum?: number;
+  losid: number;
+  comment?: string;
   user: IUser;
 }
 

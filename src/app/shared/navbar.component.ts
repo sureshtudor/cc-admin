@@ -5,9 +5,9 @@ import {AuthenticationService} from "../services/authentication.service";
 @Component({
   selector: 'app-navbar',
   template: `
-    <nav class="navbar navbar-toggleable-md navbar-inverse bg-primary">
-      <a href="#" class="navbar-brand">
-        <img src="../../assets/images/logo.png" height="36">
+    <nav class="navbar navbar-expand-lg bg-primary">
+      <a class="navbar-brand" href="#">
+        <img src="../../assets/images/logo.png" height="30">
       </a>
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
@@ -19,7 +19,7 @@ import {AuthenticationService} from "../services/authentication.service";
       </ul>
       <ul class="navbar-nav">
         <li class="nav-item">
-          <span class="navbar-text">{{authenticatedUser}}</span>
+          <span class="navbar-text text-secondary">{{authenticatedUser}}</span>
         </li>
         <li class="nav-item">
           <a class="nav-link clickable" routerLink="login" (click)="loginOrOut()">

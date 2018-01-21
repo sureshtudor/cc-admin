@@ -7,13 +7,15 @@ export interface AlertModel {
 }
 
 @Component({
-  selector: 'alert',
+  selector: 'app-alert',
   template: `
-    <div class="modal-dialog">
+    <div class="modal-dialog" role="document">
       <div class="modal-content">
-        <div class="modal-header justify-content-start">
-          <button type="button" class="close" (click)="close()">&times;</button>
+        <div class="modal-header">
           <h4 class="modal-title">{{title || 'Alert'}}</h4>
+          <button type="button" class="close" aria-label="Close" (click)="close()">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
         <div class="modal-body">
           <div [innerHtml]="message"></div>

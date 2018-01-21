@@ -1,11 +1,12 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {DialogService} from "ng2-bootstrap-modal";
 
 import {AlertComponent} from "../../shared/modal/alert.component";
 import {ConfirmComponent} from "../../shared/modal/confirm.component";
-import {ExternalService} from "../../services/external.service";
+import {ExternalService} from "../external.service";
+import {RecaptchaComponent} from "ng-recaptcha";
 
 @Component({
   selector: 'app-reset-pwd',
@@ -31,9 +32,9 @@ import {ExternalService} from "../../services/external.service";
 
         <!-- I'm not a robot check -->
         <input type="text" class="form-control" formControlName="recaptcha" hidden>
-        <recaptcha (resolved)="myForm.get('recaptcha').patchValue($event)" 
+        <re-captcha #reCaptcha (resolved)="myForm.get('recaptcha').patchValue($event)" 
                    siteKey="6Ldm3SgUAAAAAPJzIUecsl5MZLfYMoa55l0o_ggx">
-        </recaptcha>
+        </re-captcha>
         <br/>
 
         <button type="submit" class="btn btn-default btn-primary" [disabled]="myForm.invalid">
@@ -53,6 +54,9 @@ export class ResetPwdComponent implements OnInit {
   myForm: FormGroup;
   isLoading: boolean = false;
 
+  @ViewChild('reCaptcha')
+  captchaRef: RecaptchaComponent;
+
   constructor(private fb: FormBuilder,
               private router: Router,
               private modal: DialogService,
@@ -70,17 +74,17 @@ export class ResetPwdComponent implements OnInit {
   onSubmit(model) {
     this.isLoading = true; // start spinner
 
-    this.externalService.pwmResetPassword(model.recaptcha, model.username).subscribe(
+    this.externalService.resetPassword(model.recaptcha, model.username).subscribe(
       data => {
         this.modal.addDialog(AlertComponent,
-          {title: 'Success', message: data}, {closeByClickingOutside: true});
-        this.exitPage();
+          {title: 'Success', message: data})
+          .subscribe(() => this.exitPage());
       },
       err => {
-        this.isLoading = false; // stop spinner
         this.modal.addDialog(AlertComponent,
-          {title: 'Error', message: err.json().message || 'Server Error !'},
-          {closeByClickingOutside: true})
+          {title: 'Error', message: err.json().message || 'Server Error !'})
+          .subscribe(() => this.captchaRef.reset());
+        this.isLoading = false;
       }
     );
   }
@@ -97,6 +101,7 @@ export class ResetPwdComponent implements OnInit {
   }
 
   private exitPage() {
+    this.isLoading = false;
     this.myForm.markAsPristine();
     this.router.navigate(['']);
   }

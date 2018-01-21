@@ -28,7 +28,7 @@ export class UserService extends BaseService {
   }
 
   getUser(userid: number): Observable<IUserDetails> {
-    return this.http.get(this.appendPathParam(USER_URI + USERS_API, userid), this.getJsonHttpOption())
+    return this.http.get(this.appendPathVariable(USER_URI + USERS_API, userid), this.getJsonHttpOption())
       .map(res => res.json() as IUserDetails).catch(this.handleError);
   }
 
@@ -39,13 +39,13 @@ export class UserService extends BaseService {
 
   updateUser(user: IUserDetails): Observable<string> {
     return this.http.put(
-      this.appendPathParam(USER_URI + USERS_API, user.user.userid), JSON.stringify(user),
+      this.appendPathVariable(USER_URI + USERS_API, user.user.userid), JSON.stringify(user),
       this.getJsonHttpOption())
       .map(res => res.text()).catch(this.handleError);
   }
 
   deleteUser(userid): Observable<string> {
-    return this.http.delete(this.appendPathParam(USER_URI + USERS_API, userid), this.getJsonHttpOption())
+    return this.http.delete(this.appendPathVariable(USER_URI + USERS_API, userid), this.getJsonHttpOption())
       .map(res => res.text()).catch(this.handleError);
   }
 
